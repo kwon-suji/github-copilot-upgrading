@@ -1,4 +1,5 @@
 import sqlite3
+import json
 
 BASE = """CREATE TABLE IF NOT EXISTS _guachi_data (key PRIMARY KEY, value)"""
 OPT_MAP = """CREATE TABLE IF NOT EXISTS _guachi_options (key PRIMARY KEY, value)"""
@@ -26,16 +27,31 @@ class dbdict(dict):
 
     def __getitem__(self, key):
         row = self.con.execute(self.select_value,(key,)).fetchone()
-        if not row: raise KeyError("key '%s' not found in persistent dictionary" % key)
-        return row[0]
+        if not row:
+            raise KeyError("key '%s' not found in persistent dictionary" % key)
+        value = row[0]
+        # dict 타입만 json.loads로 복원, 나머지는 그대로 반환
+        try:
+            decoded = json.loads(value)
+            if isinstance(decoded, dict):
+                return decoded
+        except (TypeError, json.JSONDecodeError):
+            pass
+        return value
 
 
     def __setitem__(self, key, item):
+        # dict 타입은 JSON 문자열로 변환
+        # dict만 json.dumps로 저장, 나머지는 그대로 저장
+        if isinstance(item, dict):
+            item_db = json.dumps(item)
+        else:
+            item_db = item
         try:
             if self.con.execute(self.select_key, (key,)).fetchone():
-                self.con.execute(self.update_value, (item,key))
+                self.con.execute(self.update_value, (item_db, key))
             else:
-                self.con.execute(self.insert_key_value,(key, item))
+                self.con.execute(self.insert_key_value, (key, item_db))
         except sqlite3.InterfaceError as e:
             raise sqlite3.InterfaceError(e)
 

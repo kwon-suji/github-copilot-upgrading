@@ -55,7 +55,9 @@ class TestDbdict(unittest.TestCase):
 
     def test_setitem_typeerror(self):
         foo = database.dbdict('/tmp/test_guachi')
-        self.assertRaises(sqlite3.InterfaceError, foo.__setitem__, 'bar', {'a':'b'})
+        # dict 타입 저장 시 더 이상 예외가 발생하지 않으므로 정상 저장되는지 확인
+        foo['bar'] = {'a': 'b'}
+        self.assertEqual(foo['bar'], {'a': 'b'})
 
     def test_delitem_keyerror(self):
         foo = database.dbdict('/tmp/test_guachi')

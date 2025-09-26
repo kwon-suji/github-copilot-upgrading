@@ -1,5 +1,3 @@
-import distribute_setup
-distribute_setup.use_setuptools()
 from setuptools import setup
 
 tests_require = ['pytest']
@@ -94,15 +92,18 @@ Our full Documentation is hosted here. Go take a look for the full API.
 
 http://guachi.googlecode.com/hg/docs/build/html/index.html
 """,
-   classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Topic :: Software Development :: Build Tools',
-        'Programming Language :: Python :: 2.5',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-      ],
+     classifiers=[
+                'Development Status :: 4 - Beta',
+                'Intended Audience :: Developers',
+                'License :: OSI Approved :: MIT License',
+                'Topic :: Software Development :: Build Tools',
+                'Programming Language :: Python :: 3',
+                'Programming Language :: Python :: 3.8',
+                'Programming Language :: Python :: 3.9',
+                'Programming Language :: Python :: 3.10',
+                'Programming Language :: Python :: 3.11',
+                'Programming Language :: Python :: 3.12',
+            ],
 
     license = "MIT",
     keywords = "configuration management persistent dictionaries dictionary parse map mapping",
